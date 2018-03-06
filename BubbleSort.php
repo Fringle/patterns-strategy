@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Patterns\Strategy;
 
-class BubbleSort
+class BubbleSort implements SortBehavioralInterface
 {
 	public function sort(array &$array) : void
 	{
