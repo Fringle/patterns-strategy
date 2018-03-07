@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Patterns\Strategy\BubbleSort;
+use Patterns\Strategy\ArrayBox;
 
 final class SortTest extends TestCase
 {
@@ -15,13 +16,18 @@ final class SortTest extends TestCase
 		sort(self::$sortedArray, SORT_NUMERIC);
 	}
 
+    public function testStandardSort(): void
+    {
+        $arrayBox = new ArrayBox(self::$unsortedArray);
+        $arrayBox->sort();
+        $this->assertequals(self::$sortedArray, $arrayBox->array);
+    }
+
     public function testBubbleSort(): void
     {
-    	$array = self::$unsortedArray;
-    	(new BubbleSort)->sort($array);
-    	$this->assertEquals(self::$sortedArray,$array);
+        $arrayBox = new ArrayBox(self::$unsortedArray);
+        $arrayBox->setSortBehavior(new BubbleSort);
+        $arrayBox->sort();
+    	$this->assertEquals(self::$sortedArray,$arrayBox->array);
     }
 }
-
-
-
