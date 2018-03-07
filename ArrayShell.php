@@ -2,20 +2,20 @@
 
 namespace Patterns\Strategy;
 
-class ArrayBox
+class ArrayShell
 {
 	private $sortMethod;
-	public $array = [];
+	// public $array = [];
 
-	public function __construct(array $array)
+	public function __construct()
 	{
-		$this->array = $array;
+		// $this->array = $array;
 		$this->sortMethod = new StandardSort;
 	}
 
-	public function sort()
+	public function sort(array &$array)
 	{
-		$this->sortMethod->sort($this->array);
+		$this->sortMethod->sort($array);
 	}
 
 	public function setSortBehavior(SortBehavioralInterface $sortMethod)

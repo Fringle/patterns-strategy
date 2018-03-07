@@ -3,40 +3,60 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 use Patterns\Strategy\BubbleSort;
-use Patterns\Strategy\ArrayBox;
+use Patterns\Strategy\ArrayShell;
 use Patterns\Strategy\MergeSort;
 
-final class SortTest extends TestCase
+class SortTest extends TestCase
 {
-	protected static $unsortedArray,$sortedArray;
+    public $arrayShell;
 
-	public static function setUpBeforeClass()
-	{
-		self::$unsortedArray = [4, 1, 21, 2, 4, 5, 56, 6, 2634, 26, 23, 43, 14, 14, 12, 1, 16, 61, 16, 7, 46, 734, 74, 46, 234, 5, 54, 14, 541, 134, 5, 23, 5, 2345, 23, 54, 23, 27, 7, 27, 263, 46, 2345, 2];
-		self::$sortedArray = self::$unsortedArray;
-		sort(self::$sortedArray, SORT_NUMERIC);
-	}
-
-    public function testStandardSort(): void
+    public function setUp()
     {
-        $arrayBox = new ArrayBox(self::$unsortedArray);
-        $arrayBox->sort();
-        $this->assertequals(self::$sortedArray, $arrayBox->array);
+        $this->arrayShell = new ArrayShell();
     }
 
-    public function testBubbleSort(): void
+    /**
+     * @dataProvider providerArrays
+     */
+
+    public function testStandardSort($unsorted, $sorted)
     {
-        $arrayBox = new ArrayBox(self::$unsortedArray);
-        $arrayBox->setSortBehavior(new BubbleSort);
-        $arrayBox->sort();
-    	$this->assertEquals(self::$sortedArray, $arrayBox->array);
+        $this->arrayShell->sort($unsorted);
+        $this->assertEquals($sorted, $unsorted);
     }
 
-    public function testMergeSort(): void
+    /**
+     * @dataProvider providerArrays
+     */
+
+    public function testBubbleSort($unsorted, $sorted)
     {
-        $arrayBox = new ArrayBox(self::$unsortedArray);
-        $arrayBox->setSOrtBehavior(new MergeSort);
-        $arrayBox->sort();
-        $this->assertEquals(self::$sortedArray, $arrayBox->array);
+        $this->arrayShell->setSortBehavior(new BubbleSort);
+        $this->arrayShell->sort($unsorted);
+        $this->assertEquals($sorted, $unsorted);
+    }
+
+    /**
+     * @dataProvider providerArrays
+     */
+
+    public function testMergeSort($unsorted, $sorted)
+    {
+        $this->arrayShell->setSOrtBehavior(new MergeSort);
+        $this->arrayShell->sort($unsorted);
+        $this->assertEquals($sorted, $unsorted);
+    }
+
+    public function providerArrays(): array
+    {
+        return [
+            array(
+                'unsorted' => [4, 1, 21, 2, 4, 5, 56, 6, 2634, 26, 23, 43, 14, 14, 12, 1, 16, 61, 16, 7, 46, 734, 74, 46, 234, 5, 54, 14, 541, 134, 5, 23, 5, 2345, 23, 54, 23, 27, 7, 27, 263, 46, 2345, 2],
+                'sorted' => [1, 1, 2, 2, 4, 4, 5, 5, 5, 5, 6, 7, 7, 12, 14, 14, 14, 16, 16, 21, 23, 23, 23, 23, 26, 27, 27, 43, 46, 46, 46, 54, 54, 56, 61, 74, 134, 234, 263, 541, 734, 2345, 2345, 2634,]),
+            array(
+                'unsorted' => [2, 14, 14, 15, 51, 25, 5, 53, 436, 65, 6235, 7, 3, 37, 45, 65, 134, 5, 325, 234, 231, 6, 6, 71, 7, 7, 45, 5, 347, 54, 634, 7, 856, 678, 4788, 456756],
+                'sorted' => [2, 3, 5, 5, 5, 6, 6, 7, 7, 7, 7, 14, 14, 15, 25, 37, 45, 45, 51, 53, 54, 65, 65, 71, 134, 231, 234, 325, 347, 436, 634, 678, 856, 4788, 6235, 456756,]
+            )
+        ];
     }
 }
