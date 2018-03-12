@@ -5,6 +5,8 @@ use PHPUnit\Framework\TestCase;
 use Patterns\Strategy\BubbleSort;
 use Patterns\Strategy\ArrayShell;
 use Patterns\Strategy\MergeSort;
+use Patterns\Strategy\QuickSortRecursive;
+use Patterns\Strategy\QuickSortRecursiveCopying;
 
 class SortTest extends TestCase
 {
@@ -42,7 +44,29 @@ class SortTest extends TestCase
 
     public function testMergeSort($unsorted, $sorted)
     {
-        $this->arrayShell->setSOrtBehavior(new MergeSort);
+        $this->arrayShell->setSortBehavior(new MergeSort);
+        $this->arrayShell->sort($unsorted);
+        $this->assertEquals($sorted, $unsorted);
+    }
+
+    /**
+     * @dataProvider providerArrays
+     */
+
+    public function testQuickSortRecursive($unsorted, $sorted)
+    {
+        $this->arrayShell->setSortBehavior(new QuickSortRecursive);
+        $this->arrayShell->sort($unsorted);
+        $this->assertEquals($sorted, $unsorted);
+    }
+
+    /**
+     * @dataProvider providerArrays
+     */
+
+    public function testQuickSortRecursiveCopying($unsorted, $sorted)
+    {
+        $this->arrayShell->setSortBehavior(new QuickSortRecursiveCopying);
         $this->arrayShell->sort($unsorted);
         $this->assertEquals($sorted, $unsorted);
     }
