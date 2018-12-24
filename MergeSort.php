@@ -7,7 +7,7 @@ class MergeSort implements SortBehavioralInterface
 {
 	public function sort(array &$array) : void
 	{
-		$array = $this->mergeSort($array);
+		$array = $this->mergeSort($array);;
 	}
 
 	private function mergeSort($array): array
